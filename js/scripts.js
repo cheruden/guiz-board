@@ -1,82 +1,55 @@
-var answers = ["infinity","firstName","vowels"];
-
-
-var pointPerCorrect = 25;
-
-
-
-
-
-function percentage(score) {
-
-return "Your score is " + parseInt((score / 75) * 100) + "%";
-
+// BUSINESS LOGIC
+var sum = 0;
+function scoreCalculator(userValue) {
+  var names = ["js", "year", "framework","function","dom","link"];
+  names.forEach(function(name) {
+    var userValue = $("input:radio[name=" + name + "]:checked").val();
+    if(userValue === "10") {
+      sum+=10;
+    }
+  });
 }
 
 
-
-$(document).ready(function(){
-
-$("#questions").submit(function (event) {
-
-
-
-
-
-$('#result').text('');
-
-var score = 0;
-
-var answerOne = ($("input[type=radio][name=questionOneAnswer]:checked").val());
-
-var answerTwo = ($("input[type=radio][name=questionTwoAnswer]:checked").val());
-
-var answerThree = ($("input[type=radio][name=questionThreeAnswer]:checked").val());
-
-
-
-if (answerOne === undefined || answerTwo === undefined || answerThree === undefined) {
-
-$('#questionsIncomplete').text('Please Complete questions Before Submitting');
-
-$('#questionsIncomplete').fadeOut(10000);
-
-} else {
-
-if (answerOne === answers[0]) {
-
-score += pointPerCorrect;
-
-}
-
-if (answerTwo === answers[1]) {
-
-score += pointPerCorrect;
-
-}
-
-if (answerThree === answers[2]) {
-
-score += pointPerCorrect;
-
-}
-
-
-
-
-
-$("input[type=radio][name=questionOneChoice]:checked").prop('checked', false);
-
-$("input[type=radio][name=questionTwoChoice]:checked").prop('checked', false);
-
-$("input[type=radio][name=questionThreeChoice]:checked").prop('checked', false);
-
-$('#questionsIncomplete').text('');
-
-$('#result').text(percentage(score));
-
-}
-
-event.preventDefault();
-
-})});
+// USER INTERFACE LOGIC
+$(function() {
+  $("#start-btn").click(function(event) {
+    event.preventDefault();
+    var userFirstName = $("#firstName").val();
+    var userSecondName = $("#secondName").val();
+    if(userFirstName.length === 0 || userSecondName.length === 0) {
+      $("#no-name").show();
+      $("#firstName").addClass("enter-name");
+      $("#secondName").addClass("enter-name");
+    } else {
+      $("#intro").hide();
+      $("#form1").show();
+    }
+  })
+  $("#arrow-right").click(function() {
+    $("#form1").hide();
+    $("#form2").show();
+  })
+  $("#arrow-left").click(function() {
+    $("#form1").show();
+    $("#form2").hide();
+  })
+  $("#submit").click(function(event) {
+    event.preventDefault();
+    $("#score").show();
+    $("#form2").hide();
+    scoreCalculator();
+    var userFirstName = $("#firstName").val();
+    var userSecondName = $("#secondName").val();
+    if(sum <= 30) {
+      $(".name-display").text(`Nice try ${userFirstName} ${userSecondName},`);
+    } else {
+      $(".name-display").text(`Congratulations ${userFirstName} ${userSecondName},`);
+    }
+    $(".scoreDisplay").text(sum + "/60");
+  })
+  $("#retake").click(function(event) {
+    event.preventDefault();
+    location.reload();
+  })
+})
